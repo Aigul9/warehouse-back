@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/items")
@@ -34,9 +37,16 @@ public class ItemCrudController {
         this.categoryModelService = categoryModelService;
     }
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
+    @ApiOperation(value = "Get all items", notes = "This method is used to get list of items.")
+    public List<ItemModel> getAllItems() {
+        return itemModelService.findAll();
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
-    @ApiOperation(value = "Get item", notes = "This method is used to get list of items.")
+    @ApiOperation(value = "Get item", notes = "This method is used to get specific item.")
     public ItemModel get(@PathVariable("id") @ApiParam(value = "Item id") Long id) {
         return itemModelService.findById(id);
     }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -38,6 +39,11 @@ public class ItemModelServiceImpl implements ItemModelService {
             log.error(String.format("%s, itemId - %s", e.getMessage(), id));
             throw new NoSuchElementException("Item is not found.");
         }
+    }
+
+    @Override
+    public List<ItemModel> findAll() {
+        return itemRepository.findAll();
     }
 
     @Override
