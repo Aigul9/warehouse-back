@@ -4,6 +4,7 @@ import com.warehouse.dto.filter.ItemModelFilterDto;
 import com.warehouse.dto.PageDto;
 import com.warehouse.dto.request.RequestItemModelDto;
 import com.warehouse.model.ItemModel;
+import com.warehouse.repository.ItemRepository;
 import com.warehouse.service.CategoryModelService;
 import com.warehouse.service.ItemModelService;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,10 +32,12 @@ public class ItemCrudController {
 
     private final ItemModelService itemModelService;
     private final CategoryModelService categoryModelService;
+    private final ItemRepository itemRepository;
 
-    public ItemCrudController(ItemModelService itemModelService, CategoryModelService categoryModelService) {
+    public ItemCrudController(ItemModelService itemModelService, CategoryModelService categoryModelService, ItemRepository itemRepository) {
         this.itemModelService = itemModelService;
         this.categoryModelService = categoryModelService;
+        this.itemRepository = itemRepository;
     }
 
     @GetMapping
@@ -42,6 +45,21 @@ public class ItemCrudController {
     @ApiOperation(value = "Get all items", notes = "This method is used to get list of items.")
     public List<ItemModel> getAllItems() {
         return itemModelService.findAll();
+    }
+
+    @GetMapping("/cat/{category_id}")
+    @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
+    @ApiOperation(value = "Get all items by category", notes = "This method is used to get list of items for specific category.")
+    public List<ItemModel> getAllItemsByCategory(@PathVariable("category_id") @ApiParam(value = "Category id") Long category_id) {
+        List<Long> itemIds = itemRepository.getItemsByCategoryId(category_id);
+        List<ItemModel> itemModels = new ArrayList<>();
+
+        for (Long id: itemIds) {
+            ItemModel itemModel = itemModelService.findById(id);
+            itemModels.add(itemModel);
+        }
+
+        return itemModels;
     }
 
     @GetMapping("/{id}")

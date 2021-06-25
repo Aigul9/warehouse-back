@@ -71,7 +71,7 @@ public class JwtAuthenticationController {
                 HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/api/v1/users")
     @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
     @ApiOperation(value = "Get users", notes = "This method is used to get list of users.")
     public List<UserModel> getAllUser() {
