@@ -38,6 +38,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null,
                 jwtToken = null;
 
+        String reqPath = request.getRequestURI();
+        log.info(reqPath);
+
+//        if (!reqPath.equals("/authenticate")) {
+
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer")) {
             jwtToken = requestTokenHeader.substring(7);
 

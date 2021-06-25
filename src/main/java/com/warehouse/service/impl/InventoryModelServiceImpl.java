@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -40,6 +41,11 @@ public class InventoryModelServiceImpl implements InventoryModelService {
             log.error(String.format("%s, InventoryId - %s", e.getMessage(), id));
             throw new NoSuchElementException("Inventory is not found.");
         }
+    }
+
+    @Override
+    public List<InventoryModel> findAll() {
+        return inventoryRepository.findAll();
     }
 
     @Override

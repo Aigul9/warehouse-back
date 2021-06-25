@@ -18,7 +18,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin
 @AllArgsConstructor
 public class JwtAuthenticationController {
 
@@ -62,7 +60,7 @@ public class JwtAuthenticationController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasAuthority('ADMIN_PERMISSION')")
+//    @PreAuthorize("hasAuthority('ADMIN_PERMISSION')")
     @ApiOperation(value = "Add user", notes = "This method is used to add a new user.")
     public ResponseEntity<UserModel> saveUser(@RequestBody RequestUserModelDto requestUserModelDto) {
         return new ResponseEntity<>(userModelService.save(
@@ -71,21 +69,21 @@ public class JwtAuthenticationController {
                 HttpStatus.OK);
     }
 
-    @GetMapping("api/v1/users/{id}")
+    @GetMapping("/api/v1/users/{id}")
     @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
     @ApiOperation(value = "Get user", notes = "This method is used to get list of users.")
     public UserModel get(@PathVariable("id") @ApiParam(value = "User id") String id) {
         return userModelService.findById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/v1/users/{id}")
     @PreAuthorize("hasAuthority('ADMIN_PERMISSION')")
     @ApiOperation(value = "Delete user", notes = "This method is used to delete the user.")
     public String delete(@PathVariable("id") @ApiParam(value = "User id") String id) {
         return userModelService.deleteById(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/v1/users/{id}")
     @PreAuthorize("hasAuthority('ADMIN_PERMISSION')")
     @ApiOperation(value = "Update user info", notes = "This method is used to update the user info.")
     public UserModel update(@RequestBody RequestUserModelDto requestUserModelDto,

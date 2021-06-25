@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -63,9 +65,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors().and()
+        httpSecurity
+                .cors().and()
                 .csrf().disable()
-                .authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
+                .authorizeRequests()
+                .antMatchers(AUTH_WHITELIST).permitAll()
+                .antMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 .antMatchers("api/**").access("hasRole('ADMIN') or hasRole('SELLER') " +
                 "or hasRole('WAREHOUSEMAN') or hasRole('DEFAULT_USER')")
                 .anyRequest().authenticated()
@@ -74,5 +79,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+
+        web.ignoring()
+                .antMatchers(HttpMethod.POST,
+                        "/",
+                        "/authenticate",
+                        "/register"
+        );
     }
 }

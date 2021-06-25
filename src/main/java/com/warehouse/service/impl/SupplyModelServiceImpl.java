@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -39,6 +40,11 @@ public class SupplyModelServiceImpl implements SupplyModelService {
             log.error(String.format("%s, supplyId - %s", e.getMessage(), id));
             throw new NoSuchElementException("Supply is not found.");
         }
+    }
+
+    @Override
+    public List<SupplyModel> findAll() {
+        return supplyRepository.findAll();
     }
 
     @Override

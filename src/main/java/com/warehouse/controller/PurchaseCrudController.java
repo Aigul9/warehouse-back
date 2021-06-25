@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/purchases")
@@ -33,9 +34,16 @@ public class PurchaseCrudController {
         this.purchaseModelService = purchaseModelService;
     }
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
+    @ApiOperation(value = "Get purchases", notes = "This method is used to get list of purchases made in the store.")
+    public List<PurchaseModel> getAllPurchases() {
+        return purchaseModelService.findAll();
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
-    @ApiOperation(value = "Get purchase", notes = "This method is used to get list of purchases made in the store.")
+    @ApiOperation(value = "Get purchase", notes = "This method is used to get specific purchase made in the store.")
     public PurchaseModel get(@PathVariable("id") @ApiParam(value = "Purchase id") Long id) {
         return purchaseModelService.findById(id);
     }

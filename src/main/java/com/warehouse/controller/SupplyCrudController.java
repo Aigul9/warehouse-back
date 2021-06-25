@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/supplies")
@@ -33,9 +34,16 @@ public class SupplyCrudController {
         this.supplyModelService = supplyModelService;
     }
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
+    @ApiOperation(value = "Get supplies", notes = "This method is used to get list of supplies made in the store.")
+    public List<SupplyModel> getAllSupplies() {
+        return supplyModelService.findAll();
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
-    @ApiOperation(value = "Get supply", notes = "This method is used to get list of supplies to the store.")
+    @ApiOperation(value = "Get supply", notes = "This method is used to get specific supply to the store.")
     public SupplyModel get(@PathVariable("id") @ApiParam(value = "Supply id") Long id) {
         return supplyModelService.findById(id);
     }

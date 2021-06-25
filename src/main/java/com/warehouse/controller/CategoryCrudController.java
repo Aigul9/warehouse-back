@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/categories")
 public class CategoryCrudController {
@@ -31,9 +33,16 @@ public class CategoryCrudController {
         this.categoryModelService = categoryModelService;
     }
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
+    @ApiOperation(value = "Get all categories", notes = "This method is used to get list of categories.")
+    public List<CategoryModel> getAllCategories() {
+        return categoryModelService.findAll();
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
-    @ApiOperation(value = "Get category", notes = "This method is used to get list of categories.")
+    @ApiOperation(value = "Get category", notes = "This method is used to get specific category.")
     public CategoryModel get(@PathVariable("id") @ApiParam(value = "Category id") Long id) {
         return categoryModelService.findById(id);
     }

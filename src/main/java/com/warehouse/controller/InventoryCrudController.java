@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/inventories")
@@ -34,9 +35,16 @@ public class InventoryCrudController {
         this.inventoryModelService = inventoryModelService;
     }
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
+    @ApiOperation(value = "Get inventories", notes = "This method is used to get list of supplies made in the store.")
+    public List<InventoryModel> getAllInventories() {
+        return inventoryModelService.findAll();
+    }
+
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
-    @ApiOperation(value = "Get inventory", notes = "This method is used to get list of inventories from the store.")
+    @ApiOperation(value = "Get inventory", notes = "This method is used to get specific inventory from the store.")
     public InventoryModel get(@PathVariable("id") @ApiParam(value = "Inventory id") Long id) {
         return inventoryModelService.findById(id);
     }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -39,6 +40,11 @@ public class PurchaseModelServiceImpl implements PurchaseModelService {
             log.error(String.format("%s, purchaseId - %s", e.getMessage(), id));
             throw new NoSuchElementException("Purchase is not found.");
         }
+    }
+
+    @Override
+    public List<PurchaseModel> findAll() {
+        return purchaseRepository.findAll();
     }
 
     @Override

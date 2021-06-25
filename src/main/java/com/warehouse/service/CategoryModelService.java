@@ -6,9 +6,13 @@ import com.warehouse.model.CategoryModel;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface CategoryModelService {
     CategoryModel findById(Long id);
+
+    List<CategoryModel> findAll();
 
     Long deleteById(Long id);
 

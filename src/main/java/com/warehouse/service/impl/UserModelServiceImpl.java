@@ -36,7 +36,9 @@ public class UserModelServiceImpl implements UserModelService, UserDetailsServic
     @Override
     public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
         try {
+            log.info(id);
             UserModel userModel = userRepository.findById(id).get();
+            log.info(userModel.getPassword());
             System.out.println(RolesPermissions.getAuthorities(userModel.getRole()));
             return new User(userModel.getUsername(), userModel.getPassword(),
                     RolesPermissions.getAuthorities(userModel.getRole()));

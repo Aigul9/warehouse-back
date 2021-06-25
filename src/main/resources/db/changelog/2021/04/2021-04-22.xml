@@ -158,4 +158,12 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="2021-06-25-02-10-3" author="Aigul Sibgatullina">
+        <sqlFile dbms="postgres" path="init.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="2021-06-26-02-10-1" author="Aigul Sibgatullina">
+        <sqlFile dbms="postgres" path="items.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>

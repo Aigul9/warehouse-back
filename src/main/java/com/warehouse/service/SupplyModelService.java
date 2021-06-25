@@ -6,9 +6,13 @@ import com.warehouse.model.SupplyModel;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface SupplyModelService {
     SupplyModel findById(Long id);
+
+    List<SupplyModel> findAll();
 
     Long deleteById(Long id);
 
