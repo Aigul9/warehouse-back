@@ -58,6 +58,11 @@ public class UserModelServiceImpl implements UserModelService, UserDetailsServic
     }
 
     @Override
+    public List<UserModel> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public String deleteById(String id) {
         try {
             userRepository.deleteById(id);

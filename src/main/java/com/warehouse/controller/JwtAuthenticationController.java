@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 public class JwtAuthenticationController {
@@ -69,9 +71,16 @@ public class JwtAuthenticationController {
                 HttpStatus.OK);
     }
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
+    @ApiOperation(value = "Get users", notes = "This method is used to get list of users.")
+    public List<UserModel> getAllUser() {
+        return userModelService.findAll();
+    }
+
     @GetMapping("/api/v1/users/{id}")
     @PreAuthorize("hasAuthority('READ_ONLY_PERMISSION')")
-    @ApiOperation(value = "Get user", notes = "This method is used to get list of users.")
+    @ApiOperation(value = "Get user", notes = "This method is used to get specific user.")
     public UserModel get(@PathVariable("id") @ApiParam(value = "User id") String id) {
         return userModelService.findById(id);
     }
