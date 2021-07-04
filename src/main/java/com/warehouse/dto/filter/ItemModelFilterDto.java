@@ -1,6 +1,7 @@
 package com.warehouse.dto.filter;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +12,16 @@ import lombok.Setter;
 @ApiModel(description = "Represents an item for filtering purposes.")
 public class ItemModelFilterDto {
 
+    @ApiModelProperty(value = "name of the item")
     private String name;
+
+    @ApiModelProperty(value = "available quantity of the item")
     private Integer quantity;
+
+    @ApiModelProperty(value = "price of the item")
     private Double price;
+
+    @ApiModelProperty(value = "category id")
     private Long categoryId;
 
     public ItemModelFilterDto(
