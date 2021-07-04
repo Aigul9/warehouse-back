@@ -1,6 +1,7 @@
 package com.warehouse.controller;
 
 import com.warehouse.config.jwt.JwtTokenUtil;
+import com.warehouse.dto.request.RequestDefaultUserModelDto;
 import com.warehouse.dto.request.RequestUserModelDto;
 import com.warehouse.dto.request.JwtRequest;
 import com.warehouse.dto.request.JwtResponse;
@@ -61,10 +62,19 @@ public class JwtAuthenticationController {
         return new ResponseEntity<>(new JwtResponse(token), HttpStatus.OK);
     }
 
-    @PostMapping("/register")
-//    @PreAuthorize("hasAuthority('ADMIN_PERMISSION')")
+    @PostMapping("/api/v1/users")
+    @PreAuthorize("hasAuthority('ADMIN_PERMISSION')")
     @ApiOperation(value = "Add user", notes = "This method is used to add a new user.")
-    public ResponseEntity<UserModel> saveUser(@RequestBody RequestUserModelDto requestUserModelDto) {
+    public ResponseEntity<UserModel> post(@RequestBody RequestUserModelDto requestUserModelDto) {
+        return new ResponseEntity<>(userModelService.save(
+                requestUserModelDto.fromRequestUserModelDtoToUserModel(requestUserModelDto,
+                        bcryptEncoder)),
+                HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    @ApiOperation(value = "Register", notes = "This method is used to add a new user.")
+    public ResponseEntity<UserModel> saveUser(@RequestBody RequestDefaultUserModelDto requestUserModelDto) {
         return new ResponseEntity<>(userModelService.save(
                 requestUserModelDto.fromRequestUserModelDtoToUserModel(requestUserModelDto,
                         bcryptEncoder)),
